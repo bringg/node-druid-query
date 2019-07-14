@@ -49,6 +49,22 @@ describe('Aggregations', function() {
     })
   })
 
+  describe('longLast', function() {
+    it('should create spec', function() {
+      var spec = Query.aggregation('longLast', 'output', 'input')
+
+      expect(spec.type).to.be('longLast')
+      expect(spec.name).to.be('output')
+      expect(spec.fieldName).to.be('input')
+    })
+
+    it('should throw error when metric is not specified', function() {
+      expect(function() {
+        Query.aggregation('longLast', 'output')
+      }).to.throwException()
+    })
+  })
+
   describe('max', function() {
     it('should create spec', function() {
       var spec = Query.aggregation('max', 'output', 'input')
