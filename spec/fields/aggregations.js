@@ -135,12 +135,13 @@ describe('Aggregations', function() {
 
   describe('cardinality', function() {
     it('should create spec', function() {
-      var spec = Query.aggregation('cardinality', 'output', ['a', 'b'], true)
+      var spec = Query.aggregation('cardinality', 'output', ['a', 'b'], true, true)
 
       expect(spec.type).to.be('cardinality')
       expect(spec.name).to.be('output')
       expect(spec.fieldNames).to.eql(['a', 'b'])
       expect(spec.byRow).to.be(true)
+      expect(spec.round).to.be(true)
     })
 
     it('should throw error when field names are not specified', function() {
