@@ -170,4 +170,28 @@ describe('Aggregations', function() {
       }).to.throwException()
     })
   })
+
+  describe('filtered', function() {
+      it('should create spec', function() {
+          var spec = Query.aggregation('filtered', 'filteredAgg', 'testDim',7, 'count', 'result')
+
+          expect(spec.type).to.be('filtered')
+          expect(spec.filter).to.eql({
+              type:      'selector',
+              dimension: 'testDim',
+              value:     7
+          })
+          expect(spec.aggregator).to.eql({
+              type: 'count',
+              name: 'result'
+          })
+      })
+
+      it('should throw error when dimension is not specified', function() {
+          expect(function() {
+              Query.aggregation('filtered', 'filteredAgg', 'testDim',7)
+          }).to.throwException()
+      })
+  })
+
 })
