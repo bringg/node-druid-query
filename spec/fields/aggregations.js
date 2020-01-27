@@ -173,7 +173,7 @@ describe('Aggregations', function() {
 
   describe('filtered', function() {
       it('should create spec', function() {
-          var spec = Query.aggregation('filtered', 'filteredAgg', 'testDim',7, 'count', 'result')
+          var spec = Query.aggregation('filtered', 'filteredAgg', 'count', 'result',Query.filter("selector", 'testDim', 7));
 
           expect(spec.type).to.be('filtered')
           expect(spec.filter).to.eql({
@@ -192,6 +192,32 @@ describe('Aggregations', function() {
               Query.aggregation('filtered', 'filteredAgg', 'testDim',7)
           }).to.throwException()
       })
+
+      it('should create spec with nested filter', function() {
+          var spec = Query.aggregation('filtered', 'filteredAgg', 'count', 'result',Query.filter("and", Query.filter("selector", 'testDim', 7),Query.filter("selector", 'testDim_1', 'aaa')));
+
+          expect(spec.type).to.be('filtered')
+          expect(spec.filter).to.eql({
+              type:      'and',
+              fields: [
+                  {
+                      type:      'selector',
+                      dimension: 'testDim',
+                      value:     7
+                  } ,
+                  {
+                      type:      'selector',
+                      dimension: 'testDim_1',
+                      value:     'aaa'
+                  }
+              ]
+          })
+          expect(spec.aggregator).to.eql({
+              type: 'count',
+              name: 'result'
+          })
+      })
+
   })
 
 })
