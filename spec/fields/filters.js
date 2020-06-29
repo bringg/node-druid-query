@@ -5,6 +5,28 @@ var expect = require('expect.js')
 
 
 describe('Filters', function() {
+    describe('bound', function() {
+        it('should create bound filter', function() {
+            var spec = Query.filter('bound', 'dim', 30, 40, true, false, 'numeric')
+
+            expect(spec).to.eql({
+                type:      'bound',
+                dimension: 'dim',
+                lower:      30,
+                upper:      40,
+                lowerStrict: true,
+                upperStrict: false,
+                ordering: 'numeric',
+                extractionFn: null
+            })
+        })
+
+        it('should throw error if dimension is not specified', function() {
+            expect(function() {
+                var spec = Query.filter('bound', null, 30, 40, true, false, 'numeric')
+            }).to.throwException()
+        })
+    })
   describe('Selector', function() {
     it('should create filter', function() {
       var spec = Query.filter('selector', 'dim', 'value')
